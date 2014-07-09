@@ -1,7 +1,19 @@
 require 'puppet/provider/package/homebrew'
 
-Puppet::Type.type(:package).provide(:cask, :parent => :brew) do
+Puppet::Type.type(:package).provide(
+    :cask, :parent => Puppet::Type.type(:package).provider(:brew)
+) do
   desc "Homebrew-cask repository management on OS X"
+
+  has_feature :installable, :install_options
+  has_feature :versionable
+  has_feature :upgradeable
+  has_feature :uninstallable
+
+  commands :id   => "/usr/bin/id"
+  commands :stat => "/usr/bin/stat"
+  commands :sudo => "/usr/bin/sudo"
+  commands :brew => "/usr/local/bin/brew"
 
   # Install packages, known as formulas, using brew.
   def install
