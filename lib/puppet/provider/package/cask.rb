@@ -1,7 +1,7 @@
 require 'puppet/provider/package'
 
 Puppet::Type.type(:package).provide(:cask, :parent => Puppet::Provider::Package) do
-  BREW_CUSTOM_ENVIRONMENT = { "HOMEBREW_CACHE" => "/Library/Caches/Homebrew", "HOMEBREW_LOGS" => "/Library/Logs/Homebrew/", "HOMEBREW_NO_EMOJI" => "Yes" }
+  CASK_CUSTOM_ENVIRONMENT = { "HOMEBREW_CACHE" => "/Library/Caches/Homebrew", "HOMEBREW_LOGS" => "/Library/Logs/Homebrew/", "HOMEBREW_NO_EMOJI" => "Yes" }
   desc "Package management using HomeBrew Cask on OS X"
 
   confine  :operatingsystem => :darwin
@@ -20,9 +20,9 @@ Puppet::Type.type(:package).provide(:cask, :parent => Puppet::Provider::Package)
     owner = super([command(:stat), '-nf', '%Uu', command(:brew)]).to_i
     Puppet.debug "command owner is: #{owner}"
     if cmd[-1].is_a? Hash and cmd[-1].has_key? :custom_environment
-        env = BREW_CUSTOM_ENVIRONMENT.merge(cmd.pop()[:custom_environment])
+        env = CASK_CUSTOM_ENVIRONMENT.merge(cmd.pop()[:custom_environment])
     else
-        env = BREW_CUSTOM_ENVIRONMENT
+        env = CASK_CUSTOM_ENVIRONMENT
     end
     if super([command(:id), '-u']).to_i.zero?
       Puppet.debug "running command in sudo environment as current user is root"
