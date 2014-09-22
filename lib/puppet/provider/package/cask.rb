@@ -1,6 +1,6 @@
 require 'puppet/provider/package'
 
-Puppet::Type.type(:package).provide(:brew, :parent => Puppet::Provider::Package) do
+Puppet::Type.type(:package).provide(:cask, :parent => Puppet::Provider::Package) do
   BREW_CUSTOM_ENVIRONMENT = { "HOMEBREW_CACHE" => "/Library/Caches/Homebrew", "HOMEBREW_LOGS" => "/Library/Logs/Homebrew/", "HOMEBREW_NO_EMOJI" => "Yes" }
   desc "Package management using HomeBrew Cask on OS X"
 
