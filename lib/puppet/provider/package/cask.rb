@@ -120,7 +120,7 @@ Puppet::Type.type(:package).provide(:cask, :parent => Puppet::Provider::Package)
 
   def installed?
     is_not_installed = execute(
-        command(:brew), :cask, :info, @resource[:name]
+        command(:brew), :info, :cask, @resource[:name]
     ).split("\n").grep(/^Not installed$/).first
     is_not_installed.nil?
   end
@@ -128,7 +128,7 @@ Puppet::Type.type(:package).provide(:cask, :parent => Puppet::Provider::Package)
   def query
     Puppet.debug "Querying #{@resource[:name]}"
     begin
-      cellar_path = execute([command(:brew),:cask, '--cellar']).chomp
+      cellar_path = execute([command(:brew),:cask]).chomp
       Puppet.debug "Cellars path: #{cellar_path}"
       info = execute([command(:brew), :cask, :info, @resource[:name]]).split("\n").grep(/^#{cellar_path}/).first
       return nil if info.nil?
@@ -171,7 +171,7 @@ Puppet::Type.type(:package).provide(:cask, :parent => Puppet::Provider::Package)
 
   def self.package_list(options={})
     Puppet.debug "Listing currently installed casks"
-    brew_list_command = [command(:brew), :cask, "list", "--versions"]
+    brew_list_command = [command(:brew), :cask, "list"]
 
     if name = options[:justme]
       brew_list_command << name
