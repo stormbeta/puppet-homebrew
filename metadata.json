@@ -1,6 +1,6 @@
 {
   "name": "gildas-homebrew",
-  "version": "0.4.16",
+  "version": "0.5.0",
   "author": "gildas",
   "summary": "Homebrew package installer and provider",
   "license": "Apache-2.0",

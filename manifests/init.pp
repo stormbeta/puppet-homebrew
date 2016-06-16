@@ -135,19 +135,13 @@ class homebrew (
     '/Library/Logs/Homebrew',
   ]
 
-  # Ensure the group, user, and home directory exist
-  ensure_resource('group', $group, {'ensure' => 'present'})
-  if $user != 'root' {
-    ensure_resource('user', $user, {'ensure' => 'present', 'shell' => '/bin/bash'})
-    ensure_resource('file', "/Users/${user}", {'ensure' => 'directory', 'owner' => $user, 'group' => $group, 'mode' => '0755', 'require' => [User[$user], Group[$group]]})
-  }
+  #Assume user and group exist - otherwise puppet might screw up network users
 
   file {$homebrew_directories:
     ensure  => directory,
     owner   => $homebrew::user,
     group   => $homebrew::group,
     mode    => '0775',
-    require => Group[$group],
   } ->
 
   file {'/usr/local':
@@ -155,7 +149,6 @@ class homebrew (
     owner   => $homebrew::user,
     group   => $homebrew::group,
     mode    => '0775',
-    require => Group[$group],
   } ->
 
   exec {'install-homebrew':
